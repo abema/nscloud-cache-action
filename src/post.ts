@@ -15,7 +15,8 @@ async function main() {
         let foundProblems = false;
 
         for (const p of cachePaths) {
-            const st = fs.lstatSync(p.mountTarget, { throwIfNoEntry: false });
+            const expandedFilePath = utils.resolveHome(p.mountTarget);
+            const st = fs.lstatSync(expandedFilePath, { throwIfNoEntry: false });
 
             if (st == null) {
                 core.warning(`${p.mountTarget}: was linked to the cache volume, but does not exist any more. Did another action (e.g. checkout) delete it?`);

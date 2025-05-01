@@ -26985,9 +26985,9 @@ const metadataFileName = "cache-metadata.json";
 function resolveHome(filepath) {
     // Ugly, but should work
     const home = process.env.HOME || "~";
-    const pathParts = filepath.split(path.sep);
+    const pathParts = filepath.split(external_node_path_namespaceObject.sep);
     if (pathParts.length > 1 && pathParts[0] === "~") {
-        return path.join(home, ...pathParts.slice(1));
+        return external_node_path_namespaceObject.join(home, ...pathParts.slice(1));
     }
     return filepath;
 }
@@ -27081,7 +27081,8 @@ async function main() {
     else {
         let foundProblems = false;
         for (const p of cachePaths) {
-            const st = external_node_fs_namespaceObject.lstatSync(p.mountTarget, { throwIfNoEntry: false });
+            const expandedFilePath = resolveHome(p.mountTarget);
+            const st = external_node_fs_namespaceObject.lstatSync(expandedFilePath, { throwIfNoEntry: false });
             if (st == null) {
                 lib_core.warning(`${p.mountTarget}: was linked to the cache volume, but does not exist any more. Did another action (e.g. checkout) delete it?`);
                 foundProblems = true;
